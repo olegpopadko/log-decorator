@@ -12,7 +12,7 @@ class LogDecorator
     protected $message;
     protected $logger;
 
-    public function __construct(\Psr\Log\LoggerInterface $logger, $component)
+    public function __construct($component, \Psr\Log\LoggerInterface $logger)
     {
         $this->begin     = Carbon::now();
         $this->component = $component;

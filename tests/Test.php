@@ -35,7 +35,7 @@ class LogDecoratorTest extends \PHPUnit_Framework_TestCase
 
     public function testDecoratorConstruct()
     {
-        $component = new LogDecorator($this->monolog, new Component());
+        $component = new LogDecorator(new Component(), $this->monolog);
 
         $this->assertTrue($this->handler->hasDebugRecords());
 
@@ -44,7 +44,7 @@ class LogDecoratorTest extends \PHPUnit_Framework_TestCase
 
     public function testDecoratorMethod()
     {
-        $component = new LogDecorator($this->monolog, new Component());
+        $component = new LogDecorator(new Component(), $this->monolog);
 
         $component->method1((object)(array)'23423', 234234, $component);
 
@@ -57,7 +57,7 @@ class LogDecoratorTest extends \PHPUnit_Framework_TestCase
 
     public function testDecoratorDestruct()
     {
-        new LogDecorator($this->monolog, new Component());
+        new LogDecorator(new Component(), $this->monolog);
 
         $this->assertTrue($this->handler->hasDebugRecords());
 
