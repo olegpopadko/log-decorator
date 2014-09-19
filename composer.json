@@ -1,0 +1,26 @@
+{
+    "name": "olegpopadko/log-decorator",
+    "description": "",
+    "authors": [
+        {
+            "name": "Oleg Popadko",
+            "email": "oleg.popadko@icloud.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "psr/log": "~1.0",
+        "illuminate/support": "4.2.*",
+        "nesbot/carbon": "~1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.2.*",
+        "monolog/monolog": "~1.6"
+    },
+    "autoload": {
+        "psr-0": {
+            "LogDecorator": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
