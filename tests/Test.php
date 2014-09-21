@@ -1,6 +1,7 @@
 <?php
 
 use LogDecorator\LogDecorator;
+use LogDecorator\Settings;
 
 class Component
 {
@@ -35,7 +36,7 @@ class LogDecoratorTest extends \PHPUnit_Framework_TestCase
 
     public function testDecoratorConstruct()
     {
-        $component = new LogDecorator(new Component(), $this->monolog);
+        $component = new LogDecorator(new Component(), new Settings($this->monolog));
 
         $this->assertTrue($this->handler->hasDebugRecords());
 
@@ -44,7 +45,7 @@ class LogDecoratorTest extends \PHPUnit_Framework_TestCase
 
     public function testDecoratorMethod()
     {
-        $component = new LogDecorator(new Component(), $this->monolog);
+        $component = new LogDecorator(new Component(), new Settings($this->monolog));
 
         $component->method1((object)(array)'23423', 234234, $component);
 
@@ -57,7 +58,7 @@ class LogDecoratorTest extends \PHPUnit_Framework_TestCase
 
     public function testDecoratorDestruct()
     {
-        new LogDecorator(new Component(), $this->monolog);
+        new LogDecorator(new Component(), new Settings($this->monolog));
 
         $this->assertTrue($this->handler->hasDebugRecords());
 
