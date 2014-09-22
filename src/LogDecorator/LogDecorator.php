@@ -3,6 +3,7 @@
 namespace LogDecorator;
 
 use Carbon\Carbon;
+use Instantiator\Exception\InvalidArgumentException;
 
 class LogDecorator
 {
@@ -10,10 +11,25 @@ class LogDecorator
     protected $component;
     protected $context;
     protected $message;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
     protected $logger;
 
-    public function __construct($component, SettingsInterface $settings)
+    /**
+     * @var Formatter\FormatterInterface
+     */
+    protected $formatter;
+
+    public function __construct($component, $settings)
     {
+        if ($settings instanceof \Psr\Log\LoggerInterface) {
+            $settings = new Settings($settings);
+        }
+        if (!$settings instanceof Settings) {
+            throw new InvalidArgumentException();
+        }
         $this->begin     = Carbon::now();
         $this->component = $component;
         $this->formatter = $settings->getFormatter();

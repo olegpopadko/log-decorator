@@ -1,6 +1,6 @@
 <?php
 
-namespace LogDecorator;
+namespace LogDecorator\Formatter;
 
 interface Loggerable
 {
