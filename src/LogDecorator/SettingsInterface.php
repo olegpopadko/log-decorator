@@ -16,7 +16,7 @@ interface SettingsInterface
     public function setLogger(\Psr\Log\LoggerInterface $formatter);
 
     /**
-     * @return FormatterInterface
+     * @return Formatter\FormatterInterface
      */
     public function getFormatter();
 
@@ -25,4 +25,15 @@ interface SettingsInterface
      * @return mixed
      */
     public function setFormatter(Formatter\FormatterInterface $formatter);
+
+    /**
+     * @return Stopwatch\StopwatchInterface
+     */
+    public function getStopwatch();
+
+    /**
+     * @param Stopwatch\StopwatchInterface $stopwatch
+     * @return mixed
+     */
+    public function setStopwatch(Stopwatch\StopwatchInterface $formatter);
 } 

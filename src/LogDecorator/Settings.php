@@ -14,6 +14,11 @@ class Settings implements SettingsInterface
      */
     protected $formatter;
 
+    /**
+     * @var Stopwatch\StopwatchInterface
+     */
+    protected $stopwatch;
+
     public function __construct(\Psr\Log\LoggerInterface $logger)
     {
         $this->setLogger($logger);
@@ -64,5 +69,32 @@ class Settings implements SettingsInterface
         return new Formatter\ReflectionFormatter;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getStopwatch()
+    {
+        if (is_null($this->stopwatch)) {
+            $this->stopwatch = $this->getDefaultStopwatch();
+        }
+        return $this->stopwatch;
+    }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function setStopwatch(Stopwatch\StopwatchInterface $stopwatch)
+    {
+        $this->stopwatch = $stopwatch;
+    }
+
+    /**
+     * Gets default formatter
+     *
+     * @param Stopwatch\StopwatchInterface $formatter
+     */
+    protected function getDefaultStopwatch()
+    {
+        return new Stopwatch\Stopwatch;
+    }
 } 

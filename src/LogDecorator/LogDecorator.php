@@ -7,7 +7,6 @@ use Instantiator\Exception\InvalidArgumentException;
 
 class LogDecorator
 {
-    protected $begin;
     protected $component;
     protected $context;
     protected $message;
@@ -22,6 +21,11 @@ class LogDecorator
      */
     protected $formatter;
 
+    /**
+     * @var Stopwatch\StopwatchInterface
+     */
+    protected $stopwatch;
+
     public function __construct($component, $settings)
     {
         if ($settings instanceof \Psr\Log\LoggerInterface) {
@@ -30,10 +34,15 @@ class LogDecorator
         if (!$settings instanceof Settings) {
             throw new InvalidArgumentException();
         }
-        $this->begin     = Carbon::now();
+
         $this->component = $component;
+
+        $this->stopwatch = $settings->getStopwatch();
+        $this->stopwatch->start();
+
         $this->formatter = $settings->getFormatter();
-        $this->context   = [
+
+        $this->context = [
             'name'       => get_class($component),
             'identifier' => new \MongoId(),
             'number'     => 1,
@@ -47,15 +56,17 @@ class LogDecorator
         $context               = $this->getContext();
         $context['method']     = $method;
         $context['parameters'] = $this->formatter->formatParameters($this->component, $method, $parameters);
+
         $this->logger->info($this->message, $context);
+
         return call_user_func_array(array($this->component, $method), $parameters);
     }
 
     public function __destruct()
     {
         $this->logger->debug($this->message, array_merge($this->getContext(), [
-            'execution_time'            => Carbon::now()->timestamp - $this->begin->timestamp,
-            'execution_time_for_humans' => Carbon::now()->diffForHumans($this->begin),
+            'execution_time'            => $this->stopwatch->stop(),
+            'execution_time_for_humans' => $this->stopwatch->stop(true),
         ]));
     }
 
