@@ -9,7 +9,6 @@ class LogDecorator
 {
     protected $component;
     protected $context;
-    protected $message;
 
     /**
      * @var \Psr\Log\LoggerInterface
@@ -47,8 +46,10 @@ class LogDecorator
             'identifier' => new \MongoId(),
             'number'     => 1,
         ];
-        $this->message   = implode(' ', \array_only($this->context, ['name', 'identifier']));
-        with($this->logger = $settings->getLogger())->debug($this->message, $this->context);
+
+        $message = sprintf('Initialized with `%s` object', get_class($this->component));
+
+        with($this->logger = $settings->getLogger())->debug($this->getMessage($message), $this->context);
     }
 
     public function __call($method, $parameters)
@@ -57,17 +58,24 @@ class LogDecorator
         $context['method']     = $method;
         $context['parameters'] = $this->formatter->formatParameters($this->component, $method, $parameters);
 
-        $this->logger->info($this->message, $context);
+        $message = $this->getMessage(sprintf('Call `%s` object `%s` method', get_class($this->component), $method));
+        $this->logger->info($message, $context);
 
         return call_user_func_array(array($this->component, $method), $parameters);
     }
 
     public function __destruct()
     {
-        $this->logger->debug($this->message, array_merge($this->getContext(), [
+        $message = $this->getMessage(sprintf('Finish with `%s` object', get_class($this->component)));
+        $this->logger->debug($message, array_merge($this->getContext(), [
             'execution_time'            => $this->stopwatch->stop(),
             'execution_time_for_humans' => $this->stopwatch->stop(true),
         ]));
+    }
+
+    protected function getMessage($message)
+    {
+        return '[LogDecorator] ' . $message;
     }
 
     protected function getContext()
