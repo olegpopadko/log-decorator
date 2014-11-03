@@ -1,7 +1,6 @@
 <?php
 
 use LogDecorator\LogDecorator;
-use LogDecorator\Settings;
 
 class Component
 {
@@ -41,6 +40,24 @@ class LogDecoratorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->handler->hasDebugRecords());
 
         $this->assertCount(1, $this->handler->getRecords());
+    }
+
+    /**
+     * @expectedException \LogDecorator\InvalidArgumentException
+     * @expectedExceptionMessage First argument must be an object
+     */
+    public function testDecoratorFirstArgumentException()
+    {
+        new LogDecorator(null, null);
+    }
+
+    /**
+     * @expectedException \LogDecorator\InvalidArgumentException
+     * @expectedExceptionMessage Second argument must be instance of
+     */
+    public function testDecoratorSecondArgument()
+    {
+        new LogDecorator(new Component, null);
     }
 
     public function testDecoratorMethod()

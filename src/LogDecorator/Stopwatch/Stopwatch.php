@@ -24,7 +24,7 @@ class Stopwatch implements StopwatchInterface
     protected $start;
 
     /**
-     *
+     * Start the timer
      */
     public function start()
     {
@@ -32,9 +32,10 @@ class Stopwatch implements StopwatchInterface
     }
 
     /**
-     * Stops the timer and returns the elapsed time.
+     * Stops the timer and returns the elapsed time
      *
-     * @return float
+     * @param bool $for_humans
+     * @return float|string
      */
     public function stop($for_humans = false)
     {
